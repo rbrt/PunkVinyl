@@ -1,0 +1,21 @@
+{% if record_list %}
+	<ul>
+	<table>
+	{% for record in record_list %}
+	<tr>
+		<td>
+				<img src="{{record.image}}" style="width:100px;">
+		</td>
+		<td>
+				<a href="{{ record.link }}">{{ record.band }} - {{ record.album }} - {{record.vinyl}}" - ${{record.price}}0 from {{record.sitename}}</a>
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+	</ul>
+{% else %}
+	<p>No records are available. </p>
+{% endif %}
+
+
+
