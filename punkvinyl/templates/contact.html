@@ -1,5 +1,27 @@
 {%  extends "base_page.html" %}
+{% load staticfiles %}
 
+{% block content_wrapper %}
 <div class="container">
+    <div class="span4">
+    <a href='#' class="thumbnail">
+        <img src="{% static "rob.jpg"  %}" alt="">
+    </a>
+    </div>
 
+    <div class="span7 text-center">
+        <h1>Contact Info:</h1>
+        <h4>robbutler902@gmail.com</h4>
+        <p>Send your questions, suggestions, complaints, etc...</p>
+        <h1>Bands:</h1>
+        <a href="http://lifechaindbeat.blogspot.com"><h4>Life Chain</h4></a>
+        <a href="http://contagiumcrust.blogspot.com"><h4>Contagium</h4></a>
+        <h1>About:</h1>
+        <p>Me: Punk/Programmer from Halifax, NS</p>
+        <p>Site: <a href="http://www.github.com/robertbutler/punkvinyl">
+            Python/JS/Django/Bootstrap</p>
+        </a>
+
+    </div>
 </div>
+{% endblock %}
