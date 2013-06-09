@@ -16,12 +16,11 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/rob/punkvinyl/database/test.db',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+        'NAME': os.path.join(PROJECT_DIR,'database/test.db'),
         'USER': '',
         'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -122,7 +121,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/rob/punkvinyl/punkvinyl/templates',
+    os.path.join(PROJECT_DIR, 'punkvinyl/templates'),
 )
 
 INSTALLED_APPS = (

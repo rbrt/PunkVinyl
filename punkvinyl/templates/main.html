@@ -9,15 +9,24 @@ h1 { border: 1px solid #888; margin-left: 50px; width: 200px; }
 {% block content_wrapper %}
 <div class="container" id="main_container">
 
-    <h1 id="main_heading">Punk Vinyl</h1>
+    <h1 id="main_heading" class="text-center">Punk Vinyl</h1>
 
     <ul class="thumbnails">
-        <li class="span4">
-            <a href="{% url list_all %}">
+        <li class="span6">
+            <a href="{% url recordlist:list_all %}">
             <div class="thumbnail">
                 <img src="{% static "lotsofrecords.jpg"  %}" alt="">
-                <h3>Thumbnail label</h3>
-                <p>Thumbnail caption...</p>
+                <h3 class="text-center">View All</h3>
+                <p class="text-center">Sift through all records from all distros</p>
+            </div>
+            </a>
+        </li>
+        <li class="span6">
+            <a href="{% url recordlist:distros %}">
+            <div class="thumbnail">
+                <img src="{% static "lotsofdistros.jpg"  %}" alt="">
+                <h3 class="text-center">View By Distro</h3>
+                <p class="text-center">Only view vinyl from one distro</p>
             </div>
             </a>
         </li>

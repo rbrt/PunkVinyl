@@ -1,5 +1,7 @@
 from django.views.generic.base import TemplateView
+
 from recordlist.models import Records
+
 
 class RecordListAll(TemplateView):
     template_name = "recordlist.html"
@@ -19,12 +21,14 @@ class RecordListAll(TemplateView):
             else:
                 record_list_b.append(record)
             alt = not alt
-            print record
 
+        record_list = zip(record_list_a, record_list_b)
 
         response.update({
-            'record_list_a': record_list_a,
-            'record_list_b': record_list_b,
-            'record_list_a': record_list
+            'record_list': record_list
         })
         return response
+
+
+class RecordListDistro(TemplateView):
+    template_name = "distrolist.html"

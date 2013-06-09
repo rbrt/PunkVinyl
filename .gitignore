@@ -2,10 +2,6 @@
 *.log
 *.pot
 *.pyc
-static/*
-static_collected/*
 local_settings.py
 *.swp
 node_modules
-static/
-static_collected/
