@@ -4,5 +4,5 @@ import views
 
 urlpatterns = patterns(
     '',
-    url('', views.RecordList.as_view())
+    url('', views.RecordListAll.as_view()),
 )

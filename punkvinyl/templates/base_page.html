@@ -47,55 +47,6 @@
     </div>
 
     {% block content_wrapper %}
-    <div class="container">
-        <div class="row-fluid">
-        <div class="span4">
-
-       {% if record_list_a %}
-	        <ul>
-	        <table>
-	        {% for record in record_list_a %}
-	        <tr>
-		        <td>
-				    <img src="{{record.image}}" style="width:200px;">
-		        </td>
-		        <td>
-			    	<a href="{{ record.link }}">{{ record.band }} - {{ record.album }} - {{record.vinyl}}" - ${{record.price}}0 from {{record.sitename}}</a>
-                    <br>
-		        </td>
-	        </tr>
-	        {% endfor %}
-	        </table>
-	        </ul>
-            {% else %}
-	        <p>No records are available. </p>
-            {% endif %}
-        </div>
-        <div class="span4">
-
-        {% if record_list_b %}
-	        <ul>
-	        <table>
-	        {% for record in record_list_b %}
-	        <tr>
-		        <td>
-				    <img src="{{record.image}}" style="width:200px;">
-		        </td>
-		        <td>
-			    	<a href="{{ record.link }}">{{ record.band }} - {{ record.album }} - {{record.vinyl}}" - ${{record.price}}0 from {{record.sitename}}</a>
-                    <br>
-		        </td>
-	        </tr>
-	        {% endfor %}
-	        </table>
-	        </ul>
-            {% else %}
-	        <p>No records are available. </p>
-            {% endif %}
-        </div>
-        </div>
-
-    </div> <!-- /container -->
     {% endblock %}
 
     <!-- Le javascript

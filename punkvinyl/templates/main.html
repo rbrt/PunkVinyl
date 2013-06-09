@@ -1,0 +1,29 @@
+{% extends "base_page.html" %}
+{% load static %}
+<style>
+h1 { border: 1px solid #888; margin-left: 50px; width: 200px; }
+#main_container{
+    text-align: center;
+}
+</style>
+{% block content_wrapper %}
+<div class="container" id="main_container">
+
+    <h1 id="main_heading">Punk Vinyl</h1>
+
+    <ul class="thumbnails">
+        <li class="span4">
+            <a href="{% url list_all %}">
+            <div class="thumbnail">
+                <img src="{% static "lotsofrecords.jpg"  %}" alt="">
+                <h3>Thumbnail label</h3>
+                <p>Thumbnail caption...</p>
+            </div>
+            </a>
+        </li>
+    </ul>
+
+
+</div> <!-- /container -->
+{% endblock %}
+
