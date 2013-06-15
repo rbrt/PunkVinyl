@@ -13,7 +13,7 @@ h1 { border: 1px solid #888; margin-left: 50px; width: 200px; }
 
     <ul class="thumbnails">
         <li class="span5">
-            <a href="{% url recordlist:list_all %}">
+            <a href="{% url "recordlist:list_all" %}">
             <div class="thumbnail">
                 <img src="{% static "lotsofrecords.jpg"  %}" alt="">
                 <h3 class="text-center">View All</h3>
@@ -23,7 +23,7 @@ h1 { border: 1px solid #888; margin-left: 50px; width: 200px; }
         </li>
         <li class="span2"></li>
         <li class="span5">
-            <a href="{% url recordlist:distros %}">
+            <a href="{% url "recordlist:distros" %}">
             <div class="thumbnail">
                 <img src="{% static "lotsofdistros.jpg"  %}" alt="">
                 <h3 class="text-center">View By Distro</h3>
