@@ -134,7 +134,7 @@ def getItems():
         finalList.append(tmpContainer)
 
     finalList = hackedListToDict(finalList)
-    return finalList
+    return (finalList, "Havoc Records")
 
 # This class runs as a thread which will grab a webpage from
 # a queue of pages that need to be scraped

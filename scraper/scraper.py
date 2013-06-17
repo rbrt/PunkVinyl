@@ -1,31 +1,46 @@
 # TODO: Handle combining data from multiple websites before
 #	 	passing it on to the database
+import shutil
+import os
+from datetime.datetime import datetime
+
+from django.core.mail import send_mail
 
 import havoc
 import lavida
 import database
-import shutil
-import os
 
 PROJECT_DIR = os.path.abspath(os.path.dirname(__file__)) + '/../'
-
-#os.path.join(PROJECT_DIR,'database/test.db')
-
 dbPath = os.path.join(PROJECT_DIR, 'database/')
-# Change this to use actual db or test db
 dbName = 'test.db'
 
-# Individual grabs allow us to inspect each scraper's results
-havocItems = havoc.getItems()
-laVidaItems = lavida.getItems()
 
+def get_records():
+    # Individual grabs allow us to inspect each scraper's results
+    havocItems = havoc.getItems()
+    laVidaItems = lavida.getItems()
 
-items = havocItems + laVidaItems
+    check = [havocItems,
+             laVidaItems,]
+    
+    items = []
 
-# back up existing database before we move the existing one over
-shutil.copyfile(dbPath + dbName, dbPath + "backup-" + dbName)
+    for item in check:
+        if not item[0]:
+            send_error_mail(item[1])
+        else:
+            items += item
 
-# ultimately, putItems should take all of the records as one so
-# they are in the same database.
-database.putItems(items, dbPath + dbName)
+    shutil.copyfile(dbPath + dbName, dbPath + "backup-" + dbName)
+    database.putItems(items, dbPath + dbName)
 
+def send_error_mail(distro_name):
+    message = """
+              Scrape from %s on %s returned zero results
+              """ % (distro_name, str(datetime.now()))
+
+    send_mail("Empty Scrape",
+              message,
+              "auto@recordsite.com",
+              ['robbutler902@gmail.com']
+             )
