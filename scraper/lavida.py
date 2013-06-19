@@ -29,7 +29,11 @@ def getSpecificItems(addr, extension, newAddr, vinylSize):
     # matches pattern pulled from most recent version
     # of la vida.
     # (image link) (direct link) (band and album) (price)
-    regex = r'<img src="(.*?)".*\n.*<h3><a href="(.*?)" title="(.*?)".*\n.*\n.*\n.*\n.*\n.*\$([0-9]*\.[0-9]*)'
+    #regex = r'<img src="(.*?)".*\n.*<h3><a href="(.*?)" title="(.*?)".*\n.*\n.*\n.*\n.*\n.*\$([0-9]*\.[0-9]*)'
+
+    # Need image link, direct link, band, album, price
+    # image, band and album, link, price
+    regex = r'<a href="(.*?)".*?title="(.*?)\s[712LP].*?[\S\s]*?<img src="(.*?)"[\S\s]*?([0-9]+\.[0-9]+)'
 
     siteName = "La Vida Es Un Mus"
 
@@ -133,23 +137,25 @@ def getSpecificItems(addr, extension, newAddr, vinylSize):
 #img link, band, directlink, album, price, vinylsize, sitename
 def arrangeItems(items):
 #items take form of [image link, direct link, band album, price, size, site]
+
+    # image, band and album, link, price
     newList = []
     for item in items:
         tmpContainer = []
-        album = re.findall(r'-(.+)$', item[2])
-        band = re.findall(r'(.*)-.+$', item[2])
+        album = re.findall(r'-(.+)$', item[1])
+        band = re.findall(r'(.*)-.+$', item[1])
 
         # No '-' found, so it's probably a comp.
         # Set band to V/A and album to everything after
         # make this only do V/A if "V/A" is found, otherwise
         # put it all under "album"
         if len(album) == 0 or len(band) == 0:
-            if re.match(r'V/A', item[2]):
+            if re.match(r'V/A', item[1]):
                 band = "V/A"
-                album = re.findall(r'V/A(.*)', item[2])
+                album = re.findall(r'V/A(.*)', item[1])
                 album = album[0]
             else:
-                band = item[2]
+                band = item[1]
                 band = band[0]
                 album = ''
         else:
@@ -158,7 +164,7 @@ def arrangeItems(items):
 
         newList.append({'img': item[0],
                         'band': band,
-                        'direct': item[1],
+                        'direct': item[2],
                         'album': album,
                         'price': item[3],
                         'size': item[4],
