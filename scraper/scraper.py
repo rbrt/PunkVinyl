@@ -19,10 +19,10 @@ def get_records():
     # Individual grabs allow us to inspect each scraper's results
     print dbPath + dbName
 
-    #havocItems = havoc.getItems()
+    havocItems = havoc.getItems()
     laVidaItems = lavida.getItems()
 
-    check = [#havocItems,
+    check = [havocItems,
              laVidaItems,]
     
     items = []

@@ -33,7 +33,7 @@ def getSpecificItems(addr, extension, newAddr, vinylSize):
 
     # Need image link, direct link, band, album, price
     # image, band and album, link, price
-    regex = r'<a href="(.*?)".*?title="(.*?)\s[712LP].*?[\S\s]*?<img src="(.*?)"[\S\s]*?([0-9]+\.[0-9]+)'
+    regex = r'<a href="(.*?)".*?title="(.*?)"[\S\s]*?<img src="(.*?)"[\S\s]*?([0-9]+\.[0-9]+)'
 
     siteName = "La Vida Es Un Mus"
 
@@ -117,6 +117,7 @@ def getSpecificItems(addr, extension, newAddr, vinylSize):
             part = re.sub(r'\xaf', '', part)
             part = re.sub(r'&omega;', '', part)
             part = re.sub(r'&sigma;', '', part)
+            part = re.sub(r'&Oacute;', 'O', part)
             # Change prices to floats
             if re.match(r'[0-9]*\.[0-9]*', part):
                 tmpContainer.append(float(part))
@@ -141,9 +142,17 @@ def arrangeItems(items):
     # image, band and album, link, price
     newList = []
     for item in items:
-        tmpContainer = []
-        album = re.findall(r'-(.+)$', item[1])
-        band = re.findall(r'(.*)-.+$', item[1])
+        print item
+        print item[1]
+        if len(re.findall(r'[0-9][0-9]-[0-9][0-9]', item[1])) > 0:
+            print "MATCHED"
+            album = re.findall(r'-(.+-.+)$', item[1])
+            band = re.findall(r'(.*)-.+-.+$', item[1])
+        else:
+            album = re.findall(r'-(.+)$', item[1])
+            band = re.findall(r'(.*)-.+$', item[1])
+        print "BEFORE ALBUM %s BAND %s" % (album, band)
+
 
         # No '-' found, so it's probably a comp.
         # Set band to V/A and album to everything after
@@ -161,6 +170,7 @@ def arrangeItems(items):
         else:
             band = band[0]
             album = album[0]
+<<<<<<< HEAD
 
         newList.append({'img': item[2],
                         'band': band,
@@ -170,6 +180,18 @@ def arrangeItems(items):
                         'size': item[4],
                         'site': item[5]
                         })
+=======
+        print "AFTER ALBUM %s BAND %s\n" % (album, band)
+        if not ("Cart" in item[1] or "lavidaesunmus" in item[1]):
+            newList.append({'img': item[0],
+                            'band': band,
+                            'direct': item[2],
+                            'album': album,
+                            'price': item[3],
+                            'size': item[4],
+                            'site': item[5]
+                            })
+>>>>>>> use_django_db_management
     return newList
 
 
