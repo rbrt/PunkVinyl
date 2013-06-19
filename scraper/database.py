@@ -1,9 +1,22 @@
 
 import sqlite3 as lite
-import sys
 
-def putItems(itemData, dbpath):
+#from recordlist.models import Records
 
+
+def putItems(itemData):
+
+    for item in itemData:
+        Records.objects.create(Image=item['img'],
+                               Band=item['band'],
+                               Link=item['direct'],
+                               Album=item['album'],
+                               Price=item['price'],
+                               Vinyl=item['size'],
+                               Sitename=item['site']
+                               )
+
+"""
     # connect to database
     con = lite.connect(dbpath)
     con.text_factory = str
@@ -33,4 +46,4 @@ def putItems(itemData, dbpath):
             cur.execute("INSERT INTO Records VALUES(?,?,?,?,?,?,?)", entry)
             # Add an Id field for a primary key
         cur.execute("ALTER TABLE Records ADD COLUMN Id")
-
+"""
