@@ -170,17 +170,6 @@ def arrangeItems(items):
         else:
             band = band[0]
             album = album[0]
-<<<<<<< HEAD
-
-        newList.append({'img': item[2],
-                        'band': band,
-                        'direct': item[0],
-                        'album': album,
-                        'price': item[3],
-                        'size': item[4],
-                        'site': item[5]
-                        })
-=======
         print "AFTER ALBUM %s BAND %s\n" % (album, band)
         if not ("Cart" in item[1] or "lavidaesunmus" in item[1]):
             newList.append({'img': item[0],
@@ -191,7 +180,6 @@ def arrangeItems(items):
                             'size': item[4],
                             'site': item[5]
                             })
->>>>>>> use_django_db_management
     return newList
 
 
