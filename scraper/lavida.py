@@ -118,6 +118,7 @@ def getSpecificItems(addr, extension, newAddr, vinylSize):
             part = re.sub(r'&omega;', '', part)
             part = re.sub(r'&sigma;', '', part)
             part = re.sub(r'&Oacute;', 'O', part)
+            part = re.sub(r'&Ccedil;', 'C', part)
             # Change prices to floats
             if re.match(r'[0-9]*\.[0-9]*', part):
                 tmpContainer.append(float(part))
@@ -142,8 +143,6 @@ def arrangeItems(items):
     # image, band and album, link, price
     newList = []
     for item in items:
-        print item
-        print item[1]
         if len(re.findall(r'[0-9][0-9]-[0-9][0-9]', item[1])) > 0:
             print "MATCHED"
             album = re.findall(r'-(.+-.+)$', item[1])
@@ -151,7 +150,6 @@ def arrangeItems(items):
         else:
             album = re.findall(r'-(.+)$', item[1])
             band = re.findall(r'(.*)-.+$', item[1])
-        print "BEFORE ALBUM %s BAND %s" % (album, band)
 
 
         # No '-' found, so it's probably a comp.
@@ -170,11 +168,10 @@ def arrangeItems(items):
         else:
             band = band[0]
             album = album[0]
-        print "AFTER ALBUM %s BAND %s\n" % (album, band)
         if not ("Cart" in item[1] or "lavidaesunmus" in item[1]):
-            newList.append({'img': item[0],
+            newList.append({'img': item[2],
                             'band': band,
-                            'direct': item[2],
+                            'direct': item[0],
                             'album': album,
                             'price': item[3],
                             'size': item[4],

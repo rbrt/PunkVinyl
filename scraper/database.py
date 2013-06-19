@@ -1,47 +1,31 @@
-
-import sqlite3 as lite
-
-#from recordlist.models import Records
+from recordlist.models import Records
 
 
 def putItems(itemData):
 
-    for item in itemData:
-        Records.objects.create(Image=item['img'],
-                               Band=item['band'],
-                               Link=item['direct'],
-                               Album=item['album'],
-                               Price=item['price'],
-                               Vinyl=item['size'],
-                               Sitename=item['site']
-                               )
+    for item, label_name in itemData:
+        existing_items = Records.objects.filter(sitename=label_name)
+        # if a record is in the database and not in the new items,
+        # remove from the database
+        for record in existing_items:
+            found = False
+            for new_record in item:
+                if record.album == new_record['album'] and record.band == new_record['band']:
+                    found = True
+                    break
+            if not found:
+                record.delete()
 
-"""
-    # connect to database
-    con = lite.connect(dbpath)
-    con.text_factory = str
-
-    with con:
-        # set the cursor and get version info
-        cur = con.cursor()
-        cur.execute('SELECT SQLITE_VERSION()')
-        data = cur.fetchone()
-        print "SQLite version: %s" % data
-
-        # insert data
-        cur.execute("DROP TABLE IF EXISTS Records")
-        cur.execute("CREATE TABLE Records(Image TEXT, Band TEXT, Link TEXT, Album TEXT, Price REAL, Vinyl INT, Sitename TEXT)")
-
-        for item in itemData:
-            entry = [item['img'],
-                     item['band'],
-                     item['direct'],
-                     item['album'],
-                     item['price'],
-                     item['size'],
-                     item['site']
-            ]
-            cur.execute("INSERT INTO Records VALUES(?,?,?,?,?,?,?)", entry)
-            # Add an Id field for a primary key
-        cur.execute("ALTER TABLE Records ADD COLUMN Id")
-"""
+        # Add all new records to the database
+        for record in item:
+            if not existing_items.filter(band=record['band'], album=record['album']):
+                Records.objects.create(image=record['img'],
+                                       band=record['band'],
+                                       link=record['direct'],
+                                       album=record['album'],
+                                       price=record['price'],
+                                       vinyl=record['size'],
+                                       sitename=record['site']
+                                       )
+            else:
+                print "%s is a duplicate" % str(record)

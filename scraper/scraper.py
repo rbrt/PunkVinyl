@@ -31,10 +31,9 @@ def get_records():
         if not item[0]:
             send_error_mail(item[1])
         else:
-            items += item[0]
+            items.append(item)
 
-    shutil.copyfile(dbPath + dbName, dbPath + "backup-" + dbName)
-    database.putItems(items, dbPath + dbName)
+    database.putItems(items)
 
 def send_error_mail(distro_name):
     message = """
