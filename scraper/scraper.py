@@ -2,7 +2,7 @@
 #	 	passing it on to the database
 import shutil
 import os
-from datetime.datetime import datetime
+from datetime import datetime
 
 from django.core.mail import send_mail
 
@@ -17,6 +17,8 @@ dbName = 'test.db'
 
 def get_records():
     # Individual grabs allow us to inspect each scraper's results
+    print dbPath + dbName
+
     havocItems = havoc.getItems()
     laVidaItems = lavida.getItems()
 
@@ -29,7 +31,7 @@ def get_records():
         if not item[0]:
             send_error_mail(item[1])
         else:
-            items += item
+            items += item[0]
 
     shutil.copyfile(dbPath + dbName, dbPath + "backup-" + dbName)
     database.putItems(items, dbPath + dbName)
