@@ -162,9 +162,9 @@ def arrangeItems(items):
             band = band[0]
             album = album[0]
 
-        newList.append({'img': item[0],
+        newList.append({'img': item[2],
                         'band': band,
-                        'direct': item[2],
+                        'direct': item[0],
                         'album': album,
                         'price': item[3],
                         'size': item[4],

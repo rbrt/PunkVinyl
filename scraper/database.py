@@ -19,8 +19,6 @@ def putItems(itemData, dbpath):
         cur.execute("DROP TABLE IF EXISTS Records")
         cur.execute("CREATE TABLE Records(Image TEXT, Band TEXT, Link TEXT, Album TEXT, Price REAL, Vinyl INT, Sitename TEXT)")
 
-        print itemData
-
         for item in itemData:
             entry = [item['img'],
                      item['band'],
