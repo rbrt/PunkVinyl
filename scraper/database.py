@@ -6,6 +6,7 @@ def putItems(itemData, dbpath):
 
     # connect to database
     con = lite.connect(dbpath)
+    con.text_factory = str
 
     with con:
         # set the cursor and get version info
@@ -17,6 +18,8 @@ def putItems(itemData, dbpath):
         # insert data
         cur.execute("DROP TABLE IF EXISTS Records")
         cur.execute("CREATE TABLE Records(Image TEXT, Band TEXT, Link TEXT, Album TEXT, Price REAL, Vinyl INT, Sitename TEXT)")
+
+        print itemData
 
         for item in itemData:
             entry = [item['img'],

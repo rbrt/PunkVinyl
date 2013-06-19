@@ -23,7 +23,7 @@ def getItems():
     laVidaItems = laVidaItems + getSpecificItems(addr, extension, newAddr, 12)
 
     # Process the list to put elements in the right order
-    return arrangeItems(laVidaItems)
+    return (arrangeItems(laVidaItems), "La Vida Es Un Mus")
 
 def getSpecificItems(addr, extension, newAddr, vinylSize):
     # matches pattern pulled from most recent version
