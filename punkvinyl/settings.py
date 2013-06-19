@@ -134,6 +134,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'recordlist',
+    'punkvinyl',
+    'scraper',
 )
 
 # A sample logging configuration. The only tangible logging
