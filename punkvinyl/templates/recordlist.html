@@ -5,11 +5,51 @@
         <div class="row-fluid">
         <div class="span12">
 
-       {% if record_list %}
+       {% if record_group %}
+            <div class="pagination pagination-small pagination-centered">
+            <ul>
+                <li><a href="#">Prev</a></li>
+                {% for count in record_count %}
+                <li><a href="#">{{ count }}</a></li>
+                {% endfor %}
+                <li><a href="#">Next</a></li>
+            </ul>
+            </div>
 	        <ul>
 	        <table>
-	        {% for record in record_list %}
-	        <tr>
+            <script type="text/javascript">
+                $( document) .ready( function(){
+                    var recordGroups = new Array();
+                    for (var i=0; i < {{ list_size }}; i++){
+                        for (var j=0; j < 20; j++){
+                            recordGroups[i] = {"image0": {{ record_group.i.j.0.image}},
+                                                "link0": {{ record_group.i.j.0.link }},
+                                                "band0": {{ record_group.i.j.0.band }},
+                                               "album0": {{ record_group.i.j.0.album }},
+                                               "vinyl0": {{ record_group.i.j.0.vinyl }},
+                                               "price0": {{ record_group.i.j.0.price }},
+                                                "site0": {{ record_group.i.j.0.sitename }},
+                                               "image1": {{ record_group.i.j.1.image}},
+                                                "link1": {{ record_group.i.j.1.link }},
+                                                "band1": {{ record_group.i.j.1.band }},
+                                               "album1": {{ record_group.i.j.1.album }},
+                                               "vinyl1": {{ record_group.i.j.1.vinyl }},
+                                               "price1": {{ record_group.i.j.1.price }},
+                                                "site1": {{ record_group.i.j.1.sitename }}
+                                              };
+                        };
+                    };
+                    {% for group in record_group %}
+
+                    {% endfor %}
+                    console.log(recordGroups[0]);
+                }
+                );
+            </script>
+
+	        {% for group in record_group2 %}
+	        {% for record in group %}
+            <tr>
 		        <td>
 				    <img src="{{record.0.image}}" style="width:200px;">
 		        </td>
@@ -25,6 +65,7 @@
                     <br>
 		        </td>
 	        </tr>
+            {% endfor %}
 	        {% endfor %}
 	        </table>
 	        </ul>
