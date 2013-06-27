@@ -16,46 +16,22 @@
             </ul>
             </div>
 	        <ul>
+
+	        {% for group in record_group %}
+
 	        <table>
-            <script type="text/javascript">
-                $( document) .ready( function(){
-                    var recordGroups = new Array();
-                    for (var i=0; i < {{ list_size }}; i++){
-                        for (var j=0; j < 20; j++){
-                            recordGroups[i] = {"image0": {{ record_group.i.j.0.image}},
-                                                "link0": {{ record_group.i.j.0.link }},
-                                                "band0": {{ record_group.i.j.0.band }},
-                                               "album0": {{ record_group.i.j.0.album }},
-                                               "vinyl0": {{ record_group.i.j.0.vinyl }},
-                                               "price0": {{ record_group.i.j.0.price }},
-                                                "site0": {{ record_group.i.j.0.sitename }},
-                                               "image1": {{ record_group.i.j.1.image}},
-                                                "link1": {{ record_group.i.j.1.link }},
-                                                "band1": {{ record_group.i.j.1.band }},
-                                               "album1": {{ record_group.i.j.1.album }},
-                                               "vinyl1": {{ record_group.i.j.1.vinyl }},
-                                               "price1": {{ record_group.i.j.1.price }},
-                                                "site1": {{ record_group.i.j.1.sitename }}
-                                              };
-                        };
-                    };
-                    {% for group in record_group %}
-
-                    {% endfor %}
-                    console.log(recordGroups[0]);
-                }
-                );
-            </script>
-
-	        {% for group in record_group2 %}
-	        {% for record in group %}
             <tr>
+	        {% for record in group %}
 		        <td>
-				    <img src="{{record.0.image}}" style="width:200px;">
+                    <div id="recordgroup{{ record.counter }}">
+                    <img src="{{record.0.image}}" style="width:200px;">
+                    </div>
 		        </td>
 		        <td>
+                    <div id="recordgroup{{ record.counter }}">
 			    	<a href="{{ record.0.link }}">{{ record.0.band }} - {{ record.0.album }} - {{record.0.vinyl}}" - ${{record.0.price}}0 from {{record.0.sitename}}</a>
                     <br>
+                    </div>
 		        </td>
                 <td>
 				    <img src="{{record.1.image}}" style="width:200px;">
@@ -64,14 +40,28 @@
 			    	<a href="{{ record.1.link }}">{{ record.1.band }} - {{ record.1.album }} - {{record.1.vinyl}}" - ${{record.1.price}}0 from {{record.1.sitename}}</a>
                     <br>
 		        </td>
-	        </tr>
             {% endfor %}
-	        {% endfor %}
+	        </tr>
 	        </table>
+	        {% endfor %}
+
 	        </ul>
             {% else %}
 	        <p>No records are available. </p>
             {% endif %}
+            <script type="text/javascript">
+                $( document) .ready( function(){
+                    var recordGroups = new Array();
+                    for (var i=0; i < {{ list_size }}; i++){
+                        recordGroups[i] = $("#recordgroup" + i);
+                        console.log(recordGroups[i].children());
+                        recordGroups[i].children().hide();
+                        console.log(recordGroups[i].is(":visible"));
+                    };
+                    recordGroups[0].show();
+                }
+                );
+            </script>
         </div>
 
 

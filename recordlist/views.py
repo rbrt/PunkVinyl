@@ -31,10 +31,12 @@ class RecordListAll(TemplateView):
         for i in range(0, len(record_list) / 20):
             record_group.append(record_list[0+i*20:10+i*20:])
 
-        #[ [ (,) ] ]
+        # [ [ (,) ] ]
         # list of list of pairs
 
         records_as_json = json.dumps(["test",{"record":record_group[0][0][0].image}], separators=(',',':'))
+        print type(records_as_json)
+        records_as_json += json.dumps(["test",{"record":record_group[0][0][0].image}], separators=(',',':'))
         print records_as_json
 
 
