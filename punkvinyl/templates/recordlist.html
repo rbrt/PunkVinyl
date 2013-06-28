@@ -8,31 +8,28 @@
        {% if record_group %}
             <div class="pagination pagination-small pagination-centered">
             <ul>
-                <li><a href="#">Prev</a></li>
+                <li><a href="?page=prev{{ index }}">Prev</a></li>
                 {% for count in record_count %}
-                <li><a href="#">{{ count }}</a></li>
+                <li><a href="?page={{ count }}">{{ count }}</a></li>
                 {% endfor %}
-                <li><a href="#">Next</a></li>
+                <li><a href="?page=next{{ index }}">Next</a></li>
             </ul>
             </div>
 	        <ul>
 
-	        {% for group in record_group %}
-
 	        <table>
+	        {% for record in record_group %}
             <tr>
-	        {% for record in group %}
+                {% if record.0 %}
 		        <td>
-                    <div id="recordgroup{{ record.counter }}">
                     <img src="{{record.0.image}}" style="width:200px;">
-                    </div>
-		        </td>
+                </td>
 		        <td>
-                    <div id="recordgroup{{ record.counter }}">
-			    	<a href="{{ record.0.link }}">{{ record.0.band }} - {{ record.0.album }} - {{record.0.vinyl}}" - ${{record.0.price}}0 from {{record.0.sitename}}</a>
+                    <a href="{{ record.0.link }}">{{ record.0.band }} - {{ record.0.album }} - {{record.0.vinyl}}" - ${{record.0.price}}0 from {{record.0.sitename}}</a>
                     <br>
-                    </div>
 		        </td>
+                {% endif %}
+                {% if record.1 %}
                 <td>
 				    <img src="{{record.1.image}}" style="width:200px;">
 		        </td>
@@ -40,28 +37,15 @@
 			    	<a href="{{ record.1.link }}">{{ record.1.band }} - {{ record.1.album }} - {{record.1.vinyl}}" - ${{record.1.price}}0 from {{record.1.sitename}}</a>
                     <br>
 		        </td>
-            {% endfor %}
+                {% endif %}
 	        </tr>
+            {% endfor %}
 	        </table>
-	        {% endfor %}
 
 	        </ul>
             {% else %}
 	        <p>No records are available. </p>
             {% endif %}
-            <script type="text/javascript">
-                $( document) .ready( function(){
-                    var recordGroups = new Array();
-                    for (var i=0; i < {{ list_size }}; i++){
-                        recordGroups[i] = $("#recordgroup" + i);
-                        console.log(recordGroups[i].children());
-                        recordGroups[i].children().hide();
-                        console.log(recordGroups[i].is(":visible"));
-                    };
-                    recordGroups[0].show();
-                }
-                );
-            </script>
         </div>
 
 
