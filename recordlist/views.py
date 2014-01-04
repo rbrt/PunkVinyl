@@ -67,7 +67,9 @@ class RecordListSearch(TemplateView):
     def filter_results(self, records=None, band=None, album=None, distro=None):
         newlist = []
         for record in records:
-            if band.lower() in record.sitename.lower():
+            if (band.lower() in record.sitename.lower() or
+                band.lower() in record.band.lower() or
+                band.lower() in record.album.lower()):
                 newlist.append(record)
 
         return newlist
