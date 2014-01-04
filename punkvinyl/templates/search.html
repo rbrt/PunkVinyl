@@ -7,11 +7,11 @@
        {% if record_group %}
             <div class="pagination pagination-small pagination-centered">
             <ul>
-                <li><a href="?page=prev{{ index }}">Prev</a></li>
+                <li><a href="?page=prev{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Prev</a></li>
                 {% for count in record_count %}
-                <li><a href="?page={{ count }}">{{ count }}</a></li>
+                <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}">{{ count }}</a></li>
                 {% endfor %}
-                <li><a href="?page=next{{ index }}">Next</a></li>
+                <li><a href="?page=next{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Next</a></li>
             </ul>
             </div>
 	        <ul>
@@ -43,7 +43,7 @@
 
 	        </ul>
             {% else %}
-	        <p>No records are available. </p>
+	            <p>No records matched your search.</p>
             {% endif %}
         </div>
 
@@ -55,5 +55,3 @@
 
   </body>
 </html>
-
-
