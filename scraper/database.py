@@ -1,10 +1,16 @@
 from recordlist.models import Records
 
+def getId():
+    rec = Records.objects.all()
+    if len(rec) == 0:
+	return 1
+    return rec[len(rec)-1].id + 1
 
 def putItems(itemData):
-
     for item, label_name in itemData:
+	print "label is %s and count is %d" % (label_name, len(item))
         existing_items = Records.objects.filter(sitename=label_name)
+	to_delete = []
         # if a record is in the database and not in the new items,
         # remove from the database
         for record in existing_items:
@@ -14,7 +20,13 @@ def putItems(itemData):
                     found = True
                     break
             if not found:
-                record.delete()
+		try:
+		    to_delete.append(record)
+		except AssertionError:
+		    print "failed to delete %s %s" % (record.band, record.album)
+
+	for i in range(len(to_delete)):
+	    to_delete[i].delete()	
 
         # Add all new records to the database
         for record in item:
@@ -25,7 +37,9 @@ def putItems(itemData):
                                        album=record['album'],
                                        price=record['price'],
                                        vinyl=record['size'],
-                                       sitename=record['site']
+                                       sitename=record['site'],
+				       id=getId()
                                        )
             else:
-                print "%s is a duplicate" % str(record)
+		# TODO: Make this update existing entries if anything has changed
+	        pass
