@@ -39,6 +39,9 @@
             <ul class="nav">
               <li><a href="{% url "contact" %}">Contact</a></li>
             </ul>
+            <form method="get" action="{% url "recordlist:search" %}">
+                <input type="text" name="searchvalue"><input type="submit" value="Search">
+            </form>
           </div><!--/.nav-collapse -->
         </div>
       </div>
