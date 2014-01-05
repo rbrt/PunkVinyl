@@ -33,6 +33,7 @@ def putItems(itemData):
         # Add all new records to the database
         for record in item:
             if not existing_items.filter(band=record['band'], album=record['album']):
+                print "adding %s %s" % (record.band, record.band)
                 Records.objects.create(image=record['img'],
                                        band=record['band'],
                                        link=record['direct'],

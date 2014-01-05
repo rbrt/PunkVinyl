@@ -32,9 +32,9 @@ class RecordListAll(TemplateView):
 
         # Break all the records into groups of group_size
         record_group = []
-        group_size = 40
+        group_size = 20
         for i in range(0, (len(record_list) / group_size) + 1):
-            record_group.append(record_list[0+i*group_size:20+i*group_size:])
+            record_group.append(record_list[0+i*group_size:group_size+i*group_size:])
         try:
             index = int(self.request.GET['page'])
         except MultiValueDictKeyError:
@@ -83,6 +83,7 @@ class RecordListSearch(TemplateView):
             search_term = self.request.GET['searchvalue']
             record_list = self.filter_results(records=record_list, band=search_term)
 
+
         sorted(record_list)
         record_list_a = []
         record_list_b = []
@@ -103,9 +104,9 @@ class RecordListSearch(TemplateView):
 
         # Break all the records into groups of group_size
         record_group = []
-        group_size = 40
+        group_size = 20
         for i in range(0, (len(record_list) / group_size) + 1):
-            record_group.append(record_list[0+i*group_size:20+i*group_size:])
+            record_group.append(record_list[0+i*group_size:group_size+i*group_size:])
         try:
             index = int(self.request.GET['page'])
         except MultiValueDictKeyError:

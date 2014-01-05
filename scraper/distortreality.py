@@ -2,8 +2,33 @@ import Queue
 import re
 import threading
 import urllib2
-import BeautifulSoup
 
+# organizes a list of lists into
+# a list of dictionaries so that the order in
+# which details are pulled from each website
+# doesn't matter anymore
+def hackedListToDict(unorgList):
+    # (direct link) (image link) (price) (band) (album) (vinyl size)
+    #unorgList - direct, img, price, band, album, size, site
+    #               0     1    2     3      4      5     6
+    newList = []
+    for item in unorgList:
+        direct = item[0]
+        img = item[1]
+        price = item[2]
+        band = item[3]
+        album = item[4]
+        size = item[5]
+        site = item[6]
+        newList.append({'direct': direct,
+                        'img': img,
+                        'band': band,
+                        'album': album,
+                        'price': price,
+                        'size': size,
+                        'site': site,
+                        })
+    return newList
 
 def getItems():
     addr = 'http://distortreality.storenvy.com/collections/27203-all-products'
@@ -21,7 +46,7 @@ def getItems():
     # of distort reality.
     # (direct link) (image link) (price) (band) (album) (vinyl size)
 
-    regex = r'product.*?href="(/collections/.+?)">.*img src="(.*?)".*?\$([0-9]+\.[0-9]+).*?name">.*?\s([a-zA-Z0-9\s\&#;,]+?)-.*?([a-zA-Z0-9\s\&#;,]+?) ([LP127&quot;]+)'
+    regex = r'product.*?href="(/collections/.+?)">.*img src="(.*?)".*?\$([0-9]+\.[0-9]+).*?name">.*?\s([a-zA-Z0-9\s\&#;,/]+?)-.*?([a-zA-Z0-9\s\&#;,?/\']+?) ([712LP]?)"|$'
 
     threadQueue = Queue.Queue()
     resultQueue = Queue.Queue()
@@ -53,7 +78,7 @@ def getItems():
         t.start()
 
 
-    for i in range(1,last+1):
+    for i in range(1,5):
         newAddr = addr + extension + str(i)
 
         threadQueue.put(newAddr)
@@ -63,50 +88,60 @@ def getItems():
     while resultQueue.empty() == False:
         siteData = siteData + resultQueue.get().read()
 
-
     listBlocks = siteData.split('/li')
+
     items = []
+    # there is a problem here, most likely the regex is broken
     for block in listBlocks:
         values = re.findall(regex, block, re.DOTALL)
         if len(values) > 0:
             items.append(values[0])
 
 
-
-    import pdb; pdb.set_trace()
-
     finalList = []
 
-    # print out everything we found. Later on, this can add each
-    # field to a database. Get the threaded approach working first
-    for line in items:
-        # change apostrophe code into actual apostrophes and
-        # convert prices and vinyl size into floats and ints
-        tmpContainer = []
-        for part in line:
-            part = re.sub(r'&#039;', '\'', part)
-            # Change prices to floats
-            if re.match(r'[0-9]*\.[0-9]*', part):
-                tmpContainer.append(float(part))
-            # Change sizes to ints
-            elif re.match(r'[0-9]*"', part):
-                temp = re.findall(r'([0-9]*)"', part)
-                tmpContainer.append(int(temp[0]))
+    for part in items:
+        if len(part[0]) == 0 or part[5] == "1":
+            pass
+        else:
+            # change apostrophe code into actual apostrophes and
+            # convert prices and vinyl size into floats and ints
+            tmpContainer = []
             # Change links to full links by appending baseAddr
-            elif re.match(r'/[a-zA-Z0-9-]*/[a-zA-Z0-9-]*', part):
-                temp = re.findall(r'/[a-zA-Z0-9-]*/[a-zA-Z0-9-]*', part)
-                tmpContainer.append(addr + temp[0])
-            # Put everything else in "as is"
+            tmpContainer.append(addr + part[0])
+            tmpContainer.append(part[1])
+            # Change prices to floats
+            try:
+                tmpContainer.append(float(part[2]))
+            except:
+                print "price conversion fucked up"
+                print part
+                print "\n\n\n\n\n"
+            tmpContainer.append(re.findall(r'([A-Z].*)', part[3])[0])
+            try:
+                tmpContainer.append(re.findall(r'([A-Z].*)', part[4])[0])
+            except:
+                print "title conversion"
+                print part
+                print "\n\n\n\n\n"
+            # Change sizes to ints
+            if part[5] == "LP" or part[5] == "12":
+                tmpContainer.append(12)
             else:
-                tmpContainer.append(part)
+                try:
+                    tmpContainer.append(int(part[5]))
+                except ValueError:
+                    print "size conversion fucked up"
+                    print part
+                    print "\n\n\n\n\n"
 
-        tmpContainer.append(siteName)
-        finalList.append(tmpContainer)
+            tmpContainer.append(siteName)
+            finalList.append(tmpContainer)
 
-    for record in finalList:
-        print record
-
-    #finalList = hackedListToDict(finalList)
+    finalList = hackedListToDict(finalList)
+    # for ugh in finalList:
+    #     print "%s %s\n" % (ugh['band'], ugh['album'])
+    # print len(finalList)
     return (finalList, "Distort Reality")
 
 # This class runs as a thread which will grab a webpage from

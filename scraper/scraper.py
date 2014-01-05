@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 import havoc
 import lavida
 import database
+import distortreality
 
 PROJECT_DIR = os.path.abspath(os.path.dirname(__file__)) + '/../'
 dbPath = os.path.join(PROJECT_DIR, 'database/')
@@ -19,11 +20,11 @@ def get_records():
     # Individual grabs allow us to inspect each scraper's results
     print dbPath + dbName
 
-    havocItems = havoc.getItems()
-    laVidaItems = lavida.getItems()
+    #havocItems = havoc.getItems()
+    #laVidaItems = lavida.getItems()
+    distortRealityItems = distortreality.getItems()
 
-    check = [havocItems,
-             laVidaItems,]
+    check = [distortRealityItems]
     
     items = []
 
