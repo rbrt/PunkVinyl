@@ -42,6 +42,17 @@
 	        </table>
 
 	        </ul>
+
+            <div class="pagination pagination-small pagination-centered">
+            <ul>
+                <li><a href="?page=prev{{ index }}">Prev</a></li>
+                {% for count in record_count %}
+                <li><a href="?page={{ count }}">{{ count }}</a></li>
+                {% endfor %}
+                <li><a href="?page=next{{ index }}">Next</a></li>
+            </ul>
+            </div>
+	        <ul>
             {% else %}
 	        <p>No records are available. </p>
             {% endif %}
