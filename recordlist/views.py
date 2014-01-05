@@ -128,7 +128,8 @@ class RecordListSearch(TemplateView):
             'record_group': record_group,
             'record_count': range(1, list_size+1),
             'index':index,
-            'search_term':"searchvalue="+search_term
+            'search_term':"searchvalue="+search_term,
+            'search_term_short':search_term
         })
         return response
 
