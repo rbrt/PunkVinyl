@@ -3,6 +3,13 @@ import re
 import threading
 import urllib2
 
+# founditems = re.findall(r'<span class="product_name">(.*?)</span>', site, re.DOTALL)
+# founditems = [item.replace('\n', '') for item in founditems]
+# founditems = [re.findall(r'\s.*([a-zA-Z0-9]* LP|12"|7")', item)[0] for item in founditems]
+
+# cleaneditems = [re.findall(r'\s+([A-Za-z][A-Za-z0-9\s/-]+ (?:LP|7"|12"))', item) for item in founditems if item]
+# finalitems = [item for item in cleaneditems if len(item) > 0]
+
 # organizes a list of lists into
 # a list of dictionaries so that the order in
 # which details are pulled from each website
@@ -13,25 +20,34 @@ def hackedListToDict(unorgList):
     #               0     1    2     3      4      5     6
     newList = []
     for item in unorgList:
-        direct = item[0]
-        img = item[1]
-        price = item[2]
-        band = item[3]
-        album = item[4]
-        size = item[5]
-        site = item[6]
-        newList.append({'direct': direct,
-                        'img': img,
-                        'band': band,
-                        'album': album,
-                        'price': price,
-                        'size': size,
-                        'site': site,
-                        })
+        mistake = False
+        try:
+            direct = item[0]
+            img = item[1]
+            price = item[2]
+            band = item[3]
+            album = item[4]
+            size = item[5]
+            site = item[6]
+        except Exception as e:
+            print "list to dict error"
+            print e
+            print item
+            mistake = True
+        if not mistake:
+            newList.append({'direct': direct,
+                            'img': img,
+                            'band': band,
+                            'album': album,
+                            'price': price,
+                            'size': size,
+                            'site': site,
+                            })
     return newList
 
 def getItems():
     addr = 'http://distortreality.storenvy.com/collections/27203-all-products'
+    baseAddr = 'http://distortreality.storenvy.com/'
     extension = '/?page='
     newAddr = addr
     siteName = "Distort Reality"
@@ -46,7 +62,7 @@ def getItems():
     # of distort reality.
     # (direct link) (image link) (price) (band) (album) (vinyl size)
 
-    regex = r'product.*?href="(/collections/.+?)">.*img src="(.*?)".*?\$([0-9]+\.[0-9]+).*?name">.*?\s([a-zA-Z0-9\s\&#;,/]+?)-.*?([a-zA-Z0-9\s\&#;,?/\']+?) ([712LP]?)"|$'
+    regex = r'class="product.*?href="(/collections/.+?)">.*?img src="(.*?)".*?\$([0-9]+\.[0-9]+).*?<span class="product_name">(.*?)</span>'
 
     threadQueue = Queue.Queue()
     resultQueue = Queue.Queue()
@@ -88,27 +104,49 @@ def getItems():
     while resultQueue.empty() == False:
         siteData = siteData + resultQueue.get().read()
 
-    listBlocks = siteData.split('/li')
+    infoRegex = r'\s+([A-Za-z][A-Za-z0-9\s/.!?\'(),-]+ (?:LP|7"|12"|lp|EP|ep|MLP|mlp))'
 
-    items = []
-    # there is a problem here, most likely the regex is broken
-    for block in listBlocks:
-        values = re.findall(regex, block, re.DOTALL)
-        if len(values) > 0:
-            items.append(values[0])
+    items = [item for item in re.findall(regex, siteData, re.DOTALL)
+             if len(re.findall(infoRegex, item[-1])) != 0]
 
+    items = [list(item) for item in items]
+
+    for item in items:
+        item[-1] = re.findall(infoRegex, item[-1])[0].replace('\n', '')
+
+    for item in items:
+        albuminfo = item[-1]
+        del item[-1]
+        if 'split' in albuminfo:
+            band = re.findall(r'(.*?)split.*(?:LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            album = 'split'
+            vinyl = re.findall(r'(LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            item.append(band)
+            item.append(album)
+            item.append(vinyl)
+        elif '-' in albuminfo:
+            band = re.findall(r'(.*?)-.*(?:LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            album = re.findall(r'.*?-(.*)(?:LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            vinyl = re.findall(r'(LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            item.append(band)
+            item.append(album)
+            item.append(vinyl)
+
+    items = [item for item in items if len(item) > 0]
 
     finalList = []
 
     for part in items:
         if len(part[0]) == 0 or part[5] == "1":
-            pass
+            print "hey"
+            print part
+            del part
         else:
             # change apostrophe code into actual apostrophes and
             # convert prices and vinyl size into floats and ints
             tmpContainer = []
             # Change links to full links by appending baseAddr
-            tmpContainer.append(addr + part[0])
+            tmpContainer.append(baseAddr + part[0])
             tmpContainer.append(part[1])
             # Change prices to floats
             try:
@@ -117,19 +155,23 @@ def getItems():
                 print "price conversion fucked up"
                 print part
                 print "\n\n\n\n\n"
-            tmpContainer.append(re.findall(r'([A-Z].*)', part[3])[0])
             try:
-                tmpContainer.append(re.findall(r'([A-Z].*)', part[4])[0])
+                tmpContainer.append(part[3])
+            except:
+                "name conversion"
+                print part
+            try:
+                tmpContainer.append(part[4])
             except:
                 print "title conversion"
                 print part
                 print "\n\n\n\n\n"
             # Change sizes to ints
-            if part[5] == "LP" or part[5] == "12":
+            if part[5].lower() in "lpepmlp12" or part[5] == "12":
                 tmpContainer.append(12)
             else:
                 try:
-                    tmpContainer.append(int(part[5]))
+                    tmpContainer.append(7)
                 except ValueError:
                     print "size conversion fucked up"
                     print part
@@ -138,10 +180,10 @@ def getItems():
             tmpContainer.append(siteName)
             finalList.append(tmpContainer)
 
+    for item in finalList:
+        print item
+
     finalList = hackedListToDict(finalList)
-    # for ugh in finalList:
-    #     print "%s %s\n" % (ugh['band'], ugh['album'])
-    # print len(finalList)
     return (finalList, "Distort Reality")
 
 # This class runs as a thread which will grab a webpage from
