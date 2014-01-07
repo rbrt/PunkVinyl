@@ -17,30 +17,44 @@
             </div>
 	        <ul>
 
-	        <table>
 	        {% for record in record_group %}
-            <tr>
+            <div>
                 {% if record.0 %}
-		        <td>
-                    <img src="{{record.0.image}}" style="width:200px;">
-                </td>
-		        <td>
-                    <a href="{{ record.0.link }}">{{ record.0.band }} - {{ record.0.album }} - {{record.0.vinyl}}" - ${{record.0.price}}0 from {{record.0.sitename}}</a>
-                    <br>
-		        </td>
+                    <div class="span5 well record-block">
+                        <div class="row-fluid">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src="{{record.0.image}}" class="record-image">
+                                    </td>
+                                    <td>
+                                        <a href="{{ record.0.link }}" class="record-entry-text">{{ record.0.band }}<br>{{ record.0.album }}<br>{{record.0.vinyl}}"<br>${{record.0.price}}0<br>from {{record.0.sitename}}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
                 {% endif %}
                 {% if record.1 %}
-                <td>
-				    <img src="{{record.1.image}}" style="width:200px;">
-		        </td>
-		        <td>
-			    	<a href="{{ record.1.link }}">{{ record.1.band }} - {{ record.1.album }} - {{record.1.vinyl}}" - ${{record.1.price}}0 from {{record.1.sitename}}</a>
-                    <br>
-		        </td>
+                    <div class="span5 well record-block">
+                        <div class="row-fluid">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src="{{record.1.image}}" class="record-image">
+                                    </td>
+                                    <td>
+                                        <a href="{{ record.1.link }}" class="record-entry-text">{{ record.1.band }}<br>{{ record.1.album }}<br>{{record.1.vinyl}}"<br>${{record.1.price}}0<br>from {{record.1.sitename}}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
                 {% endif %}
-	        </tr>
+	        </div>
             {% endfor %}
-	        </table>
 
 	        </ul>
 
@@ -53,7 +67,6 @@
                 <li><a href="?page=next{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Next</a></li>
             </ul>
             </div>
-	        <ul>
 
             {% else %}
 	            <p>No records matched your search.</p>

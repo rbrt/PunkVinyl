@@ -51,11 +51,11 @@ class RecordListAll(TemplateView):
         list_size = len(record_group)
         record_group = record_group[index-1]
 
-        print list_size
+        record_count = range(1, list_size+1)
 
         response.update({
             'record_group': record_group,
-            'record_count': range(1, list_size+1),
+            'record_count': record_count,
             'index':index
         })
         return response

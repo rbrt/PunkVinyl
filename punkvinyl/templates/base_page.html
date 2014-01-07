@@ -21,7 +21,28 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
+  <style>
+    .pagination a {background-color: black !important;
+                   color: darkgray;
+                   border-color: darkgray;}
 
+    .well {padding:0px;
+           height:125px;
+           background-color: black;
+           border-color: darkgray;}
+
+    .record-image {max-width: 150px;
+                  max-height: 150px;
+                  vertical-align: middle;
+                  margin-left: 5px;
+                  width:100px;
+                  height:100px;}
+
+    .record-entry-text {float: right;
+                        margin-left: 2%;
+                        margin-right: -2%;
+                        color: darkgray;}
+  </style>
   </head>
 
   <body style="background-color:black">
@@ -55,6 +76,69 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // Position text and image in each record block
+            $(".record-block").each(function() {
+                var blockHeight = $(this).css("height");
+
+                var textHeight = $(this).find(".record-entry-text").css("height");
+                var imageHeight = $(this).find(".record-image").css("height");
+
+                var textOffset = parseInt(blockHeight) - parseInt(textHeight);
+                var imageOffset = parseInt(blockHeight) - parseInt(imageHeight);
+                $(this).find(".record-entry-text").css("margin-top", textOffset/2);
+                $(this).find(".record-image").css("margin-top", imageOffset/2);
+            });
+
+            // Concatenate long pagination bars
+            var pageNums = $(".pagination").find("li");
+            var regex = /page=([0-9]*)/;
+            var current = regex.exec(document.URL);
+
+            if (null == current){
+                current = 0;
+            }
+            else{
+                current = parseInt(current[0]);
+            }
+
+            if (pageNums.length > 16){
+                pageNums.splice(0,1);
+                pageNums.splice(pageNums.length-1, pageNums.length);
+
+                if (pageNums.length % 2 == 1){
+                    $(pageNums[pageNums.length - 2]).remove();
+                }
+                // Current page is start of range
+                if (current < pageNums.length + 6){
+                    while (pageNums.length > 16){
+                        var index1 = pageNums.length - 2;
+                        $(pageNums[index1]).remove();
+                        pageNums.splice(index1, 1);
+                    }
+                }
+                // Current page is end of range
+                else if (current > pageNums.length - 6){
+                    while (pageNums.length > 16){
+                        $(pageNums[1]).remove();
+                        pageNums.splice(1, 1);
+                    }
+                }
+                // Current page is middle of range
+                else{
+                    while (pageNums.length > 16){
+                        var index1 = pageNums.length - 2;
+                        $(pageNums[index1]).remove();
+                        pageNums.splice(index1, 1);
+                        $(pageNums[1]).remove();
+                        pageNums.splice(1, 1);
+                    }
+                }
+
+            }
+        });
+    </script>
     {% block content_wrapper %}
     {% endblock %}
     <script src="{% static "bootstrap/js/bootstrap.min.js" %}></script>
