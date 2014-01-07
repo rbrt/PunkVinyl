@@ -10,7 +10,7 @@
                 <ul>
                     <li><a href="?page=prev{{ index }}">Prev</a></li>
                     {% for count in record_count %}
-                    <li><a href="?page={{ count }}">{{ count }}</a></li>
+                    <li><a href="?page={{ count }}" class="pagination-numbers">{{ count }}</a></li>
                     {% endfor %}
                     <li><a href="?page=next{{ index }}">Next</a></li>
                 </ul>
@@ -64,7 +64,7 @@
                 <ul>
                     <li><a href="?page=prev{{ index }}">Prev</a></li>
                     {% for count in record_count %}
-                    <li><a href="?page={{ count }}">{{ count }}</a></li>
+                    <li><a href="?page={{ count }}" class="pagination-numbers">{{ count }}</a></li>
                     {% endfor %}
                     <li><a href="?page=next{{ index }}">Next</a></li>
                 </ul>

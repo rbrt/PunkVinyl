@@ -26,6 +26,8 @@
                    color: darkgray;
                    border-color: darkgray;}
 
+    .pagination-numbers {width:20px;}
+
     .well {padding:0px;
            height:125px;
            background-color: black;
@@ -91,13 +93,11 @@
                 $(this).find(".record-image").css("margin-top", imageOffset/2);
             });
 
-            var concatenatePagination = function(classname){
-                // Concatenate long pagination bars
+            var truncatePagination = function(classname){
+                // Truncate long pagination bars
                 var pageNums = $(classname).find("li");
                 var regex = /page=[a-z]*([0-9]+)/;
                 var current = regex.exec(document.URL);
-
-                console.log(current);
 
                 if (null == current){
                     current = parseInt(1);
@@ -121,57 +121,72 @@
 
                 if (pageNums.length > 16){
                     pageNums.splice(0,1);
-                    pageNums.splice(pageNums.length-1, pageNums.length);
-                    var endBuffer = 3
+                    pageNums.splice(pageNums.length-1, 1);
+                    var endBuffer = 3;
 
                     if (pageNums.length % 2 == 1){
                         $(pageNums[pageNums.length - endBuffer]).remove();
+                        pageNums.splice(pageNums.length - endBuffer, 1);
                     }
+
                     var pos = "";
-                    if (current < 8){
+                    if (current < 10){
                         pos = "left";
                     }
-                    else if (current > pageNums.length - 8 ){
+                    else if (current > pageNums.length - 10){
                         pos = "right";
                     }
                     else{
                         pos = "center";
                     }
-                    while (pageNums.length > 16){
-                        var index1 = pageNums.length - endBuffer;
-                        if (pos == "left"){
+
+                    if (pos == "left"){
+                        while (pageNums.length > 16){
+                            var index1 = pageNums.length - endBuffer;
                             $(pageNums[index1]).remove();
                             pageNums.splice(index1, 1);
                         }
-                        else if (pos == "right"){
+                    }
+                    else if (pos == "right"){
+                        while (pageNums.length > 16){
                             $(pageNums[endBuffer - 1]).remove();
                             pageNums.splice(1, 1);
                         }
-                        else if (pos == "center") {
-                            $(pageNums[index1]).remove();
-                            pageNums.splice(index1, 1);
-                            $(pageNums[endBuffer - 1]).remove();
-                            pageNums.splice(1, 1);
+                    }
+                    else if (pos == "center") {
+                        var pivot = current-1;
+                        console.log("in here at least");
+                        var offset = 0;
+                        for (var i = pageNums.length - 3; i > pivot + 6; i--){
+                            console.log("removing " + $(pageNums[i]).find("a").html() + " at index " + i);
+                            $(pageNums[i]).remove();
+                            pageNums.splice(i, 1);
+                            offset++;
+                        }
+                        for (var j = pivot - 6 + 1; j > 2; j--){
+                            console.log("removing " + $(pageNums[j]).find("a").html() + " at index " + j);
+                            $(pageNums[j]).remove();
+                            pageNums.splice(j, 1);
                         }
                     }
 
                     if (pos == "center"){
                         var index = pageNums.length - endBuffer;
-                        $(pageNums[index]).html("<a href=\"\">...</a>");
-                        $(pageNums[endBuffer - 1]).html("<a href=\"\">...</a>");
+                        $(pageNums[index]).html("<a href=\"\" class=\"pagination-numbers\">...</a>");
+                        $(pageNums[endBuffer - 1]).html("<a href=\"\" class=\"pagination-numbers\">...</a>");
                     }
                     else if (pos == "left"){
                         var index = pageNums.length - endBuffer;
-                        $(pageNums[index]).html("<a href=\"\">...</a>");
+                        $(pageNums[index]).html("<a href=\"\" class=\"pagination-numbers\">...</a>");
                     }
                     else if (pos == "right"){
-                        $(pageNums[endBuffer - 1]).html("<a href=\"\">...</a>");
+                        $(pageNums[endBuffer - 1]).html("<a href=\"\" class=\"pagination-numbers\">...</a>");
                     }
                 }
             };
 
-            concatenatePagination(".pagination-top");
-            concatenatePagination(".pagination-bottom");
+            truncatePagination(".pagination-top");
+            truncatePagination(".pagination-bottom");
         });
     </script>
     {% block content_wrapper %}

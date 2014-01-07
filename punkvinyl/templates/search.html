@@ -11,7 +11,7 @@
                 <ul>
                     <li><a href="?page=prev{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Prev</a></li>
                     {% for count in record_count %}
-                    <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}">{{ count }}</a></li>
+                    <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}" class="pagination-numbers">{{ count }}</a></li>
                     {% endfor %}
                     <li><a href="?page=next{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Next</a></li>
                 </ul>
@@ -65,7 +65,7 @@
                 <ul>
                     <li><a href="?page=prev{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Prev</a></li>
                     {% for count in record_count %}
-                    <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}">{{ count }}</a></li>
+                    <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}" class="pagination-numbers">{{ count }}</a></li>
                     {% endfor %}
                     <li><a href="?page=next{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Next</a></li>
                 </ul>
