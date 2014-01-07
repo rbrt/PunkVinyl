@@ -10,6 +10,7 @@ urlpatterns = patterns(
     '',
     url(r'^$', views.MainPageView.as_view(), name="index"),
     url(r'^contact/', views.ContactPageView.as_view(), name="contact"),
+    url(r'^blog/', views.BlogPageView.as_view(), name="blog"),
     url(r'^recordlist/', include(recordlist.urls, namespace="recordlist")),
     url(r'^admin/', include(admin.site.urls)),
 )

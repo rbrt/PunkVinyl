@@ -5,14 +5,16 @@
         <div class="row-fluid">
         <div class="span12">
        {% if record_group %}
-            <div class="pagination pagination-small pagination-centered">
-            <ul>
-                <li><a href="?page=prev{{ index }}">Prev</a></li>
-                {% for count in record_count %}
-                <li><a href="?page={{ count }}">{{ count }}</a></li>
-                {% endfor %}
-                <li><a href="?page=next{{ index }}">Next</a></li>
-            </ul>
+            <div class="span10">
+                <div class="pagination pagination-small pagination-centered pagination-top">
+                <ul>
+                    <li><a href="?page=prev{{ index }}">Prev</a></li>
+                    {% for count in record_count %}
+                    <li><a href="?page={{ count }}">{{ count }}</a></li>
+                    {% endfor %}
+                    <li><a href="?page=next{{ index }}">Next</a></li>
+                </ul>
+                </div>
             </div>
 	        <ul>
 
@@ -57,14 +59,16 @@
 
 	        </ul>
 
-            <div class="pagination pagination-small pagination-centered">
-            <ul>
-                <li><a href="?page=prev{{ index }}">Prev</a></li>
-                {% for count in record_count %}
-                <li><a href="?page={{ count }}">{{ count }}</a></li>
-                {% endfor %}
-                <li><a href="?page=next{{ index }}">Next</a></li>
-            </ul>
+            <div class="span10">
+                <div class="pagination pagination-small pagination-centered pagination-bottom">
+                <ul>
+                    <li><a href="?page=prev{{ index }}">Prev</a></li>
+                    {% for count in record_count %}
+                    <li><a href="?page={{ count }}">{{ count }}</a></li>
+                    {% endfor %}
+                    <li><a href="?page=next{{ index }}">Next</a></li>
+                </ul>
+                </div>
             </div>
             {% else %}
 	        <p>No records are available. </p>

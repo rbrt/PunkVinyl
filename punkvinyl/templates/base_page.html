@@ -91,52 +91,87 @@
                 $(this).find(".record-image").css("margin-top", imageOffset/2);
             });
 
-            // Concatenate long pagination bars
-            var pageNums = $(".pagination").find("li");
-            var regex = /page=([0-9]*)/;
-            var current = regex.exec(document.URL);
+            var concatenatePagination = function(classname){
+                // Concatenate long pagination bars
+                var pageNums = $(classname).find("li");
+                var regex = /page=[a-z]*([0-9]+)/;
+                var current = regex.exec(document.URL);
 
-            if (null == current){
-                current = 0;
-            }
-            else{
-                current = parseInt(current[0]);
-            }
+                console.log(current);
 
-            if (pageNums.length > 16){
-                pageNums.splice(0,1);
-                pageNums.splice(pageNums.length-1, pageNums.length);
-
-                if (pageNums.length % 2 == 1){
-                    $(pageNums[pageNums.length - 2]).remove();
+                if (null == current){
+                    current = parseInt(1);
                 }
-                // Current page is start of range
-                if (current < pageNums.length + 6){
-                    while (pageNums.length > 16){
-                        var index1 = pageNums.length - 2;
-                        $(pageNums[index1]).remove();
-                        pageNums.splice(index1, 1);
-                    }
-                }
-                // Current page is end of range
-                else if (current > pageNums.length - 6){
-                    while (pageNums.length > 16){
-                        $(pageNums[1]).remove();
-                        pageNums.splice(1, 1);
-                    }
-                }
-                // Current page is middle of range
                 else{
-                    while (pageNums.length > 16){
-                        var index1 = pageNums.length - 2;
-                        $(pageNums[index1]).remove();
-                        pageNums.splice(index1, 1);
-                        $(pageNums[1]).remove();
-                        pageNums.splice(1, 1);
+                    current = parseInt(current[1]);
+                    if (/prev/.exec(document.URL)){
+                        current--;
+                    }
+                    else if (/next/.exec(document.URL)){
+                        current++;
                     }
                 }
 
-            }
+                $(pageNums).each(function(){
+                    var currentIndex = $(this).find("a").html();
+                    if (currentIndex == current){
+                        $(this).find("a").attr("style", "background-color:darkred !important");
+                    }
+                });
+
+                if (pageNums.length > 16){
+                    pageNums.splice(0,1);
+                    pageNums.splice(pageNums.length-1, pageNums.length);
+                    var endBuffer = 3
+
+                    if (pageNums.length % 2 == 1){
+                        $(pageNums[pageNums.length - endBuffer]).remove();
+                    }
+                    var pos = "";
+                    if (current < 8){
+                        pos = "left";
+                    }
+                    else if (current > pageNums.length - 8 ){
+                        pos = "right";
+                    }
+                    else{
+                        pos = "center";
+                    }
+                    while (pageNums.length > 16){
+                        var index1 = pageNums.length - endBuffer;
+                        if (pos == "left"){
+                            $(pageNums[index1]).remove();
+                            pageNums.splice(index1, 1);
+                        }
+                        else if (pos == "right"){
+                            $(pageNums[endBuffer - 1]).remove();
+                            pageNums.splice(1, 1);
+                        }
+                        else if (pos == "center") {
+                            $(pageNums[index1]).remove();
+                            pageNums.splice(index1, 1);
+                            $(pageNums[endBuffer - 1]).remove();
+                            pageNums.splice(1, 1);
+                        }
+                    }
+
+                    if (pos == "center"){
+                        var index = pageNums.length - endBuffer;
+                        $(pageNums[index]).html("<a href=\"\">...</a>");
+                        $(pageNums[endBuffer - 1]).html("<a href=\"\">...</a>");
+                    }
+                    else if (pos == "left"){
+                        var index = pageNums.length - endBuffer;
+                        $(pageNums[index]).html("<a href=\"\">...</a>");
+                    }
+                    else if (pos == "right"){
+                        $(pageNums[endBuffer - 1]).html("<a href=\"\">...</a>");
+                    }
+                }
+            };
+
+            concatenatePagination(".pagination-top");
+            concatenatePagination(".pagination-bottom");
         });
     </script>
     {% block content_wrapper %}
