@@ -46,11 +46,11 @@ def hackedListToDict(unorgList):
     return newList
 
 def getItems():
-    addr = 'http://distortreality.storenvy.com/collections/27203-all-products'
-    baseAddr = 'http://distortreality.storenvy.com'
+    addr = 'http://cvrecs.storenvy.com/collections/100368-all-products'
+    baseAddr = 'http://cvrecs.storenvy.com'
     extension = '/?page='
     newAddr = addr
-    siteName = "Distort Reality"
+    siteName = "CVRECS"
 
     morePages = True
     # set pageCount arbitrarily high when running tests, set to 1
@@ -104,7 +104,8 @@ def getItems():
     while resultQueue.empty() == False:
         siteData = siteData + resultQueue.get().read()
 
-    infoRegex = r'\s+([A-Za-z][A-Za-z0-9\s/.!?\'(),-]+ (?:LP|7"|12"|lp|EP|ep|MLP|mlp))'
+    vinylTypes = r'(?:LP|7"|12"|lp|EP|ep|MLP|mlp|Lp|Ep)'
+    infoRegex = r'\s+([A-Za-z][A-Za-z0-9\s/.!?\'(),"-]+ ' + vinylTypes + ')'
 
     items = [item for item in re.findall(regex, siteData, re.DOTALL)
              if len(re.findall(infoRegex, item[-1])) != 0]
@@ -114,32 +115,51 @@ def getItems():
     for item in items:
         item[-1] = re.findall(infoRegex, item[-1])[0].replace('\n', '')
 
+    toDelete = []
+
     for item in items:
         albuminfo = item[-1]
         del item[-1]
         if 'split' in albuminfo:
-            band = re.findall(r'(.*?)split.*(?:LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            band = re.findall(r'(.*?)split.*'+vinylTypes, albuminfo)[0]
             album = 'split'
             vinyl = re.findall(r'(LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
             item.append(band)
             item.append(album)
             item.append(vinyl)
         elif '-' in albuminfo:
-            band = re.findall(r'(.*?)-.*(?:LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
-            album = re.findall(r'.*?-(.*)(?:LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
-            vinyl = re.findall(r'(LP|7"|12"|lp|EP|ep|MLP|mlp)', albuminfo)[0]
+            band = re.findall(r'(.*?)-.*'+vinylTypes, albuminfo)[0]
+            album = re.findall(r'.*?-(.*)'+vinylTypes, albuminfo)[0]
+            vinyl = re.findall(vinylTypes, albuminfo)[0]
             item.append(band)
             item.append(album)
             item.append(vinyl)
+        elif 'S/T' in albuminfo:
+            band = re.findall(r'(.*?)S/T.*'+vinylTypes, albuminfo)[0]
+            album = "S/T"
+            vinyl = re.findall(vinylTypes, albuminfo)[0]
+            item.append(band)
+            item.append(album)
+            item.append(vinyl)
+        else:
+            try:
+                band = re.findall(r'(.*?)"', albuminfo)[0]
+                album = re.findall(r'"(.*?)"', albuminfo)[0]
+                vinyl = re.findall(vinylTypes, albuminfo)[0]
+                item.append(band)
+                item.append(album)
+                item.append(vinyl)
+            except:
+                toDelete.append(item)
 
-    items = [item for item in items if len(item) > 0]
+    items = [item for item in items if len(item) > 0 and item not in toDelete]
 
     finalList = []
 
     for part in items:
-        if len(part[0]) == 0 or part[5] == "1":
-            print "hey"
+        if 5 > len(part)-1:
             print part
+        if len(part[0]) == 0 or part[5] == "1":
             del part
         else:
             # change apostrophe code into actual apostrophes and
@@ -184,7 +204,7 @@ def getItems():
         print item
 
     finalList = hackedListToDict(finalList)
-    return (finalList, "Distort Reality")
+    return (finalList, "CVRECS")
 
 # This class runs as a thread which will grab a webpage from
 # a queue of pages that need to be scraped
@@ -200,7 +220,7 @@ class ThreadPageGet(threading.Thread):
         while True:
             # get address from queueA
             addr = self.queueA.get();
-
+            pageData = ""
             try:
                 #print "Thread waiting for: " + addr
                 pageData = urllib2.urlopen(addr)
