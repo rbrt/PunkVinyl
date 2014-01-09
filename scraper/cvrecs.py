@@ -157,9 +157,9 @@ def getItems():
     finalList = []
 
     for part in items:
-        if 5 > len(part)-1:
-            print part
-        if len(part[0]) == 0 or part[5] == "1":
+        if "label-soldout" in part[1]:
+            print "ignoring " + item[-3] + " because its sold out"
+        elif len(part[0]) == 0 or part[5] == "1":
             del part
         else:
             # change apostrophe code into actual apostrophes and
@@ -187,7 +187,7 @@ def getItems():
                 print part
                 print "\n\n\n\n\n"
             # Change sizes to ints
-            if part[5].lower() in "lpepmlp12" or part[5] == "12":
+            if part[5].lower() in "lpmlp12" or part[5] == "12":
                 tmpContainer.append(12)
             else:
                 try:

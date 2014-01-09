@@ -1,4 +1,5 @@
 from recordlist.models import Records
+from datetime import datetime as dt
 
 
 def getId():
@@ -7,6 +8,15 @@ def getId():
         return 1
     return rec[len(rec) - 1].id + 1
 
+def currentDate():
+    date = dt.now()
+    return "%d-%d-%d-%d-%d-%d-%s" % (date.year,
+                                     date.month,
+                                     date.day,
+                                     date.hour,
+                                     date.minute,
+                                     date.second,
+                                     ("%d" % date.microsecond)[:3])
 
 def putItems(itemData):
     for item, label_name in itemData:
@@ -41,6 +51,7 @@ def putItems(itemData):
                                        price=record['price'],
                                        vinyl=record['size'],
                                        sitename=record['site'],
+                                       date=currentDate(),
                                        id=getId()
                                        )
             else:
