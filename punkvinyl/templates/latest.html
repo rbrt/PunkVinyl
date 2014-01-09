@@ -1,0 +1,86 @@
+{% extends "base_page.html" %}
+
+    {% block content_wrapper %}
+    <div class="container">
+        <div class="row-fluid">
+        <div class="span12">
+        <h2>Latest 60 records added"</h2>
+       {% if record_group %}
+            <div class="span10">
+                <div class="pagination pagination-small pagination-centered pagination-top">
+                <ul>
+                    <li><a href="?page=prev{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Prev</a></li>
+                    {% for count in record_count %}
+                    <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}" class="pagination-numbers">{{ count }}</a></li>
+                    {% endfor %}
+                    <li><a href="?page=next{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Next</a></li>
+                </ul>
+                </div>
+            </div>
+	        <ul>
+
+	        {% for record in record_group %}
+            <div>
+                {% if record.0 %}
+                    <div class="span5 well record-block">
+                        <div class="row-fluid">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src="{{record.0.image}}" class="record-image">
+                                    </td>
+                                    <td>
+                                        <a href="{{ record.0.link }}" class="record-entry-text">{{ record.0.band }}<br>{{ record.0.album }}<br>{{record.0.vinyl}}"<br>${{record.0.price}}0<br>from {{record.0.sitename}}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
+                {% endif %}
+                {% if record.1 %}
+                    <div class="span5 well record-block">
+                        <div class="row-fluid">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src="{{record.1.image}}" class="record-image">
+                                    </td>
+                                    <td>
+                                        <a href="{{ record.1.link }}" class="record-entry-text">{{ record.1.band }}<br>{{ record.1.album }}<br>{{record.1.vinyl}}"<br>${{record.1.price}}0<br>from {{record.1.sitename}}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
+                {% endif %}
+	        </div>
+            {% endfor %}
+
+	        </ul>
+
+            <div class="span10">
+                <div class="pagination pagination-small pagination-centered pagination-bottom">
+                <ul>
+                    <li><a href="?page=prev{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Prev</a></li>
+                    {% for count in record_count %}
+                    <li><a href="?page={{ count }}{% if search_term %}&{{search_term}}{% endif %}" class="pagination-numbers">{{ count }}</a></li>
+                    {% endfor %}
+                    <li><a href="?page=next{{ index }}{% if search_term %}&{{search_term}}{% endif %}">Next</a></li>
+                </ul>
+                </div>
+            </div>
+            {% else %}
+	            <p>No records matched your search.</p>
+            {% endif %}
+        </div>
+
+
+        </div>
+
+    </div> <!-- /container -->
+    {% endblock %}
+
+  </body>
+</html>
