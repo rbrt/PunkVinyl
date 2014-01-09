@@ -97,7 +97,7 @@ class RecordListSearch(DisplayRecords):
 
 
 class RecentlyAddedRecords(DisplayRecords):
-    template_name = "recordlist.html"
+    template_name = "latest.html"
 
     def parseDate(self, record):
         recDate = record.date.split('-')
@@ -112,11 +112,6 @@ class RecentlyAddedRecords(DisplayRecords):
     def getLatest(self, records):
         minDate = dt.min
         sortedList = sorted(records, key=(lambda x: (self.parseDate(x) - minDate).seconds), reverse=True)[:60]
-        for item in sortedList:
-            print item.band + " " + item.album
-            print item.date
-            print item.sitename
-            print "-------------"
         return sortedList
 
     def get_record_list(self):
