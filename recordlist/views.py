@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-from datetime import timedelta
+from django.contrib.auth import login, authenticate
 
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import TemplateView

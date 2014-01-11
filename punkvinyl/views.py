@@ -1,20 +1,8 @@
-from django.shortcuts import render_to_response, redirect
-from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic.base import TemplateView, ContextMixin, TemplateResponseMixin
-from recordlist.models import Records
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
+from django.views.generic.base import TemplateView
 
-import recordlist.urls
-
-
-class SearchMixin(TemplateResponseMixin):
-    def get_context_data(self, **kwargs):
-        if 'searchvalue' in self.request.GET:
-
-            return redirect('127.0.0.1:8000/recordlist/')
-
-            #return render_to_response('recordlist.html', response_context)
-        else:
-            super(SearchMixin, self).get_context_data(**kwargs)
+from punkvinyl.forms import LoginForm
 
 
 class MainPageView(TemplateView):
@@ -25,5 +13,29 @@ class ContactPageView(TemplateView):
     template_name = "contact.html"
 
 
-class BlogPageView(TemplateView):
-    template_name = "distrolist.html"
+class LoginView(TemplateView):
+    template_name = "login.html"
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('../')
+        else:
+            return HttpResponseRedirect('')
+
+
+    def get_context_data(self, **kwargs):
+        response = super(LoginView, self).get_context_data(**kwargs)
+
+        if self.request.method == "GET":
+            form = LoginForm()
+            response.update({
+                'form': form
+            })
+
+        return response
+

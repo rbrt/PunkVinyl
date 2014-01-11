@@ -12,6 +12,15 @@ class Records(models.Model):
     date = models.TextField(db_column='Date', blank=True)
     id = models.IntegerField(blank=True, primary_key=True)
 
-
     class Meta:
         db_table = u'Records'
+
+
+class Blog(models.Model):
+    title = models.TextField(db_column=u'Title')
+    text = models.TextField(db_column=u'Text')
+    date = models.TextField(db_column=u'Date')
+    id = models.IntegerField(blank=True, primary_key=True)
+
+    class Meta:
+        db_table = u'Blogs'

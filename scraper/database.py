@@ -8,6 +8,7 @@ def getId():
         return 1
     return rec[len(rec) - 1].id + 1
 
+
 def currentDate():
     date = dt.now()
     return "%d-%d-%d-%d-%d-%d-%s" % (date.year,
@@ -17,6 +18,7 @@ def currentDate():
                                      date.minute,
                                      date.second,
                                      ("%d" % date.microsecond)[:3])
+
 
 def putItems(itemData):
     for item, label_name in itemData:
@@ -55,5 +57,12 @@ def putItems(itemData):
                                        id=getId()
                                        )
             else:
-                # TODO: Make this update existing entries if anything has changed
-                pass
+                existingItem = existing_items.filter(band=record['band'], album=record['album'])
+                print "updating " + existingItem.band + " " + existingItem.album
+                existingItem.image=record['img']
+                existingItem.band=record['band']
+                existingItem.link=record['direct']
+                existingItem.album=record['album']
+                existingItem.price=record['price']
+                existingItem.vinyl=record['size']
+                existingItem.sitename=record['site']
