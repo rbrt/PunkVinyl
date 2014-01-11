@@ -1,8 +1,10 @@
 from datetime import datetime as dt
 from django.contrib.auth import login, authenticate
+from django.core.urlresolvers import reverse
 
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import TemplateView
+from punkvinyl import forms
 
 from recordlist.models import Records
 
@@ -120,3 +122,25 @@ class RecentlyAddedRecords(DisplayRecords):
 
 class RecordListDistro(TemplateView):
     template_name = "distrolist.html"
+
+
+class BenPage(TemplateView):
+    template_name = "ben.html"
+
+    def get_context_data(self, *args, **kwargs):
+        response = super(BenPage, self).get_context_data(*args,**kwargs)
+
+        if self.request.user.is_authenticated():
+            form = forms.BenForm()
+            response.update({
+                'form': form,
+            })
+            return response
+        else:
+            form = forms.LoginForm()
+            response.update({
+                'need_login': True,
+                'form': form,
+                'next': reverse("recordlist:ben")
+            })
+            return response

@@ -1,13 +1,6 @@
-{%  extends "base_page.html" %}
-{% load staticfiles %}
-
 {% block content_wrapper %}
 <div class="container">
-    <div class="span4">
-
-    </div>
-
-    <div class="span7 text-center">
+    <div class="span12 text-center">
         {%if form.errors %}
             <p> Invalid username/password combination, please try again </p>
         {% endif %}
@@ -16,6 +9,7 @@
         {% csrf_token %}
             {{form.username.label_tag}}{{form.username}}
             {{form.password.label_tag}}{{form.password}}
+            <br>
             <input type="submit" id="submit" name="submit" value="Sign in" />
             <input type="hidden" name="next" value="{{ next }}" />
         </form>

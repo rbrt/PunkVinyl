@@ -1,6 +1,10 @@
 from datetime import datetime as dt
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 
 from django.views.generic import TemplateView
+from punkvinyl import forms
 
 from recordlist.models import Blog
 
@@ -26,9 +30,18 @@ class BlogView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         response = super(BlogView, self).get_context_data(*args,**kwargs)
 
-        blogs = self.getLatest(self, Blog.objects.all())
+        if self.request.user.is_authenticated() and self.request.user.username == u'rob':
+            blogs = self.getLatest(Blog.objects.all())
 
-        response.update({
-            'blogs':blogs
-        })
-        return response
+            response.update({
+                'blogs':blogs
+            })
+            return response
+        else:
+            form = forms.LoginForm()
+            response.update({
+                'need_login': True,
+                'form': form,
+                'next': reverse("blog:blog")
+            })
+            return response

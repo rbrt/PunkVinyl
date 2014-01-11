@@ -23,9 +23,9 @@ class LoginView(TemplateView):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('../')
+                return HttpResponseRedirect(request.POST['next'])
         else:
-            return HttpResponseRedirect('')
+            return HttpResponseRedirect(request.POST['next'])
 
 
     def get_context_data(self, **kwargs):

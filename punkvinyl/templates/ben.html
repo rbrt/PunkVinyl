@@ -1,0 +1,26 @@
+{%  extends "base_page.html" %}
+{% load staticfiles %}
+
+{% block content_wrapper %}
+<div class="container">
+    {% if need_login %}
+        {% include "login.html" %}
+    {% else %}
+        <div class="span12">
+            <form action="{% url "recordlist:ben" %}" method="post">
+                {% csrf_token %}
+                {{form.band.label_tag}}{{form.band}}
+                {{form.album.label_tag}}{{form.album}}
+                {{form.price.label_tag}}{{form.price}}
+                {{form.vinyl.label_tag}}{{form.vinyl}}
+                {{form.image.label_tag}}{{form.image}}
+                {{form.link.label_tag}}{{form.link}}
+                {{form.sitename.label_tag}}{{form.sitename}}
+                <br>
+                <input type="submit" id="submit" name="submit" value="Submit" />
+                <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+        </div>
+    {%  endif %}
+</div>
+{% endblock %}
