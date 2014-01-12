@@ -1,12 +1,13 @@
 from datetime import datetime as dt
-from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import TemplateView
 from punkvinyl import forms
 
 from recordlist.models import Records
+from scraper import database
 
 
 class DisplayRecords(TemplateView):
@@ -127,6 +128,32 @@ class RecordListDistro(TemplateView):
 class BenPage(TemplateView):
     template_name = "ben.html"
 
+    def post(self, request):
+        image = request.POST['image']
+        band = request.POST['band']
+        link = request.POST['link']
+        album = request.POST['album']
+        price = request.POST['price']
+        vinyl = request.POST['vinyl']
+        sitename = "Crasher Dust"
+        date = database.currentDate()
+        id = database.getId()
+
+        if None not in [image, band, link, album, price, vinyl, sitename, date, id]:
+            Records.objects.create(image=image,
+                                   band=band,
+                                   link=link,
+                                   album=album,
+                                   price=price,
+                                   vinyl=vinyl,
+                                   sitename=sitename,
+                                   date=date,
+                                   id=id)
+            return HttpResponseRedirect(reverse('bensuccess'))
+        else:
+            return HttpResponseRedirect(reverse('benfail'))
+
+
     def get_context_data(self, *args, **kwargs):
         response = super(BenPage, self).get_context_data(*args,**kwargs)
 
@@ -144,3 +171,11 @@ class BenPage(TemplateView):
                 'next': reverse("recordlist:ben")
             })
             return response
+
+
+class BenSuccessPage(BenPage):
+    template_name = "bensuccess.html"
+
+
+class BenFailPage(BenPage):
+    template_name = "benfail.html"

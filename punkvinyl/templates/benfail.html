@@ -7,6 +7,7 @@
         {% include "login.html" %}
     {% else %}
         <div class="span12">
+            Upload Failed
             <form action="{% url "recordlist:ben" %}" method="post">
                 {% csrf_token %}
                 {{form.band.label_tag}}{{form.band}}

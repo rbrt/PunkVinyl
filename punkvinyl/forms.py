@@ -1,7 +1,4 @@
 from django import forms
-from django.forms import ModelForm
-from recordlist.models import Records
-
 
 class SearchForm(forms.Form):
     form_field = forms.CharField(max_length=50, required=True)
