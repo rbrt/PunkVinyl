@@ -131,15 +131,13 @@ class BenPage(TemplateView):
     def post(self, request):
         image = request.POST['image']
         band = request.POST['band']
-        link = request.POST['link']
         album = request.POST['album']
         price = request.POST['price']
         vinyl = request.POST['vinyl']
         sitename = "Crasher Dust"
         date = database.currentDate()
         id = database.getId()
-
-        import pdb; pdb.set_trace()
+        link = reverse('recordlist:crasherdust') + "?record-id=%d" % id
 
         if '' not in [image, band, link, album, price, vinyl, sitename, date, id]:
             Records.objects.create(image=image,
@@ -154,7 +152,6 @@ class BenPage(TemplateView):
             return HttpResponseRedirect(reverse('bensuccess'))
         else:
             return HttpResponseRedirect(reverse('benfail'))
-
 
     def get_context_data(self, *args, **kwargs):
         response = super(BenPage, self).get_context_data(*args,**kwargs)
@@ -181,3 +178,21 @@ class BenSuccessPage(BenPage):
 
 class BenFailPage(BenPage):
     template_name = "benfail.html"
+
+
+class CrasherDust(TemplateView):
+    template_name = "crasherdust.html"
+
+    def get_context_data(self, **kwargs):
+        response = super(CrasherDust, self).get_context_data(**kwargs)
+
+        if self.request.GET['record-id']:
+            response.update({
+                'record': Records.objects.filter(id=int(self.request.GET['record-id']))
+            })
+        else:
+            response.update({
+                'record': None
+            })
+
+        return response

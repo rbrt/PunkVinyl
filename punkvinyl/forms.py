@@ -14,7 +14,6 @@ class LoginForm(forms.Form):
 class BenForm(forms.Form):
     image = forms.CharField(max_length=50, required=True, label="Image Link")
     band = forms.CharField(max_length=50, required=True, label="Band Name")
-    link = forms.CharField(max_length=50, required=True, label="Link to Page")
     album = forms.CharField(max_length=50, required=True, label="Album Name")
     price = forms.CharField(max_length=50, required=True, label="Price")
     vinyl = forms.CharField(max_length=50, required=True, label="Vinyl Size")
@@ -25,8 +24,6 @@ class BenForm(forms.Form):
             raise ValidationError("No image link supplied")
         if None == self.band:
             raise ValidationError("No band name supplied")
-        if None == self.link:
-            raise ValidationError("No link supplied")
         if None == self.album:
             raise ValidationError("No album name supplied")
         if None == self.price:

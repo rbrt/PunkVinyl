@@ -1,7 +1,5 @@
 from datetime import datetime as dt
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 
 from django.views.generic import TemplateView
 from punkvinyl import forms

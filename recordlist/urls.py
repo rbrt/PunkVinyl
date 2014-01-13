@@ -9,4 +9,5 @@ urlpatterns = patterns(
     url(r'^distros$', views.RecordListDistro.as_view(), name="distros"),
     url(r'^search$', views.RecordListSearch.as_view(), name="search"),
     url(r'^latest$', views.RecentlyAddedRecords.as_view(), name="latest"),
+    url(r'^crasherdust$', views.CrasherDust.as_view(), name="crasherdust"),
 )

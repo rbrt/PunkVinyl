@@ -1,0 +1,32 @@
+{% extends "base_page.html" %}
+
+    {% block content_wrapper %}
+    <div class="container">
+        {%  if record %}
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="span5 well record-block">
+                        <div class="row-fluid">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src="{{record.image}}" class="record-image">
+                                    </td>
+                                    <td>
+                                        <a href="{{ record.link }}" class="record-entry-text">{{ record.band }}<br>{{ record.album }}<br>{{record.vinyl}}"<br>${{record.price}}0<br>from {{record.sitename}}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        {%  endif %}
+    </div> <!-- /container -->
+    {% endblock %}
+  </body>
+
+</html>
+
+
