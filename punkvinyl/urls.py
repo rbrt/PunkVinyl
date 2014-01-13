@@ -16,6 +16,6 @@ urlpatterns = patterns(
     url(r'^recordlist/', include(recordlist.urls, namespace="recordlist")),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^ben/$', recordlist.views.BenPage.as_view(), name="ben"),
-    url(r'^ben/$', recordlist.views.BenSuccessPage.as_view(), name="bensuccess"),
-    url(r'^ben/$', recordlist.views.BenFailPage.as_view(), name="benfail")
+    url(r'^bensuccess/$', recordlist.views.BenSuccessPage.as_view(), name="bensuccess"),
+    url(r'^benfail/$', recordlist.views.BenFailPage.as_view(), name="benfail")
 )

@@ -139,7 +139,9 @@ class BenPage(TemplateView):
         date = database.currentDate()
         id = database.getId()
 
-        if None not in [image, band, link, album, price, vinyl, sitename, date, id]:
+        import pdb; pdb.set_trace()
+
+        if '' not in [image, band, link, album, price, vinyl, sitename, date, id]:
             Records.objects.create(image=image,
                                    band=band,
                                    link=link,
