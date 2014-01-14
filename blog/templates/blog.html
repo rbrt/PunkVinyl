@@ -6,13 +6,27 @@
     {% if need_login %}
         {% include "login.html" %}
     {% else %}
-    <div class="span4">
-
-    </div>
-
-    <div class="span7 text-center">
-
-    </div>
+    {% for blog in blogs %}
+            <div>
+                {% if blog %}
+                    <div class="span5 well record-block">
+                        <div class="row-fluid">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{blog.title}} {{ blog.date }}
+                                    </td>
+                                    <td>
+                                        {{ blog.text }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                    </div>
+                {% endif %}
+            </div>
+    {% endfor %}
     {%  endif %}
 </div>
 {% endblock %}

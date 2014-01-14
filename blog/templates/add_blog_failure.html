@@ -7,6 +7,7 @@
         {% include "login.html" %}
     {% else %}
         <div class="span12 upload-form">
+            Upload failed
             <form action="{% url "blog:add_blog" %}" method="post">
                 {% csrf_token %}
                 {{form.title.label_tag}}{{form.title}}

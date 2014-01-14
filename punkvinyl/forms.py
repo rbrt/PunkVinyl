@@ -11,6 +11,12 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=50, required=True, widget=forms.PasswordInput)
 
 
+class BlogForm(forms.Form):
+    title = forms.CharField(max_length=50, required=True, label="Title")
+    text = forms.CharField(required=True, label="Text", widget=forms.Textarea)
+
+
+
 class BenForm(forms.Form):
     image = forms.CharField(max_length=50, required=True, label="Image Link")
     band = forms.CharField(max_length=50, required=True, label="Band Name")
